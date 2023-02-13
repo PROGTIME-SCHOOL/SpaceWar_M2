@@ -2,12 +2,16 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using SpaceWar_M2.Classes;
+
 namespace SpaceWar_M2;
 
 public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+
+    private Player player;
 
     public Game1()
     {
@@ -19,6 +23,7 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
+        player = new Player();
 
         base.Initialize();
     }
@@ -28,6 +33,8 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // TODO: use this.Content to load your game content here
+        player.LoadContent(Content);
+        
     }
 
     protected override void Update(GameTime gameTime)
@@ -45,6 +52,11 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         // TODO: Add your drawing code here
+        _spriteBatch.Begin();
+
+        player.Draw(_spriteBatch);
+
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }
