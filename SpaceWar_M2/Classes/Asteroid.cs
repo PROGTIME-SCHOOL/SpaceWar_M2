@@ -12,10 +12,45 @@ namespace SpaceWar_M2.Classes
         private Texture2D texture;
         private Vector2 position;
 
+        private Rectangle collision;
+
+        public Rectangle Collision { get { return collision; } }
+
+        public int Width
+        {
+            get
+            {
+                return texture.Width;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return texture.Height;
+            }
+        }
+
+        public Vector2 Position
+        {
+            get { return position; }
+            set
+            {
+                position = value;
+            }
+        }
+
         public Asteroid()
         {
             texture = null;
             position = Vector2.Zero;
+        }
+
+        public Asteroid(Vector2 position)
+        {
+            texture = null;
+            this.position = position;
         }
 
         public void LoadContent(ContentManager content)
@@ -23,7 +58,15 @@ namespace SpaceWar_M2.Classes
             texture = content.Load<Texture2D>("asteroid");
         }
 
-        public void Update() { }
+        public void Update()
+        {
+            // move
+            position.Y += 2;
+
+            // update collision
+            collision = new Rectangle((int)position.X, (int)position.Y,
+                Width, Height);
+        }
 
         public void Draw(SpriteBatch spriteBatch)
         {

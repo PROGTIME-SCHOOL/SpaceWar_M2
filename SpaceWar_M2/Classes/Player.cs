@@ -16,6 +16,10 @@ namespace SpaceWar_M2.Classes
         private TypePlayer typePlayer;
         private float speed;
 
+        private Rectangle collision;
+
+        public Rectangle Collision { get { return collision; } }
+
         // constructor
         public Player()
         {
@@ -79,6 +83,9 @@ namespace SpaceWar_M2.Classes
             }
             #endregion
 
+            // collision
+            collision = new Rectangle((int)position.X, (int)position.Y,
+                texture.Width, texture.Height);
         }
 
         public void Draw(SpriteBatch spriteBatch)
