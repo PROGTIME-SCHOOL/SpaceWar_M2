@@ -35,16 +35,6 @@ public class Game1 : Game
         _graphics.ApplyChanges();
     }
 
-    public Game1(int a)
-    {
-
-    }
-
-    public Game1(int a, int b) : this()
-    {
-        
-    }
-
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
@@ -64,28 +54,8 @@ public class Game1 : Game
         // TODO: use this.Content to load your game content here
         player.LoadContent(Content);
         space.LoadContent(Content);
-        //asteroid.LoadContent(Content);
 
-        for (int i = 0; i < 10; i++)
-        {
-            // создаем новый астеройд
-            Asteroid asteroid = new Asteroid(Vector2.Zero);
-            asteroid.LoadContent(Content);
 
-            // установить астеройд по рандомной позиции
-            int rectagleWidth = screenWidth;
-            int rectangleHeight = screenHeight;
-
-            Random random = new Random();
-
-            int x = random.Next(0, rectagleWidth - asteroid.Width);
-            int y = random.Next(0, rectangleHeight - asteroid.Height);
-
-            asteroid.Position = new Vector2(x, - y);
-
-            // добавляем астеройд в лист
-            asteroids.Add(asteroid);
-        }
     }
 
     protected override void Update(GameTime gameTime)
@@ -94,32 +64,10 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
-        player.Update();
+        player.Update(Content);
         space.Update();
-        //asteroid.Update();
 
-        foreach (Asteroid asteroid in asteroids)
-        {
-            asteroid.Update();
-
-            // teleport
-            if (asteroid.Position.Y > screenHeight)
-            {
-                Random random = new Random();
-                int y = random.Next(-screenHeight, 0 - asteroid.Height);
-                int x = random.Next(0, screenWidth - asteroid.Width);
-
-                asteroid.Position = new Vector2(x, y);
-            }
-
-            // check collision
-            if (asteroid.Collision.Intersects(player.Collision))
-            {
-                // ERROR!!! NEED FIX
-                asteroids.Remove(asteroid);
-                break;
-            }
-        }
+        UpdateAsteroids();
 
         base.Update(gameTime);
     }
@@ -143,6 +91,63 @@ public class Game1 : Game
         _spriteBatch.End();
 
         base.Draw(gameTime);
+    }
+
+
+    private void UpdateAsteroids()
+    {
+        // работа с астеройдами, которые уже есть в игре
+        for (int i = 0; i < asteroids.Count; i++)
+        {
+            Asteroid asteroid = asteroids[i];
+
+            asteroid.Update();
+
+            // teleport
+            if (asteroid.Position.Y > screenHeight)
+            {
+                Random random = new Random();
+                int y = random.Next(-screenHeight, 0 - asteroid.Height);
+                int x = random.Next(0, screenWidth - asteroid.Width);
+
+                asteroid.Position = new Vector2(x, y);
+            }
+
+            // check collision
+            if (asteroid.Collision.Intersects(player.Collision))
+            {
+                // ERROR!!! NEED FIX
+                asteroids.Remove(asteroid);
+                i--;    // !!!
+            }
+        }
+
+        // загрузка доп астеройдов в игру
+        if (asteroids.Count < 10)
+        {
+            LoadAsteroid();
+        }
+    }
+
+    private void LoadAsteroid()
+    {
+        // создаем новый астеройд
+        Asteroid asteroid = new Asteroid(Vector2.Zero);
+        asteroid.LoadContent(Content);
+
+        // установить астеройд по рандомной позиции
+        int rectagleWidth = screenWidth;
+        int rectangleHeight = screenHeight;
+
+        Random random = new Random();
+
+        int x = random.Next(0, rectagleWidth - asteroid.Width);
+        int y = random.Next(0, rectangleHeight - asteroid.Height);
+
+        asteroid.Position = new Vector2(x, -y);
+
+        // добавляем астеройд в лист
+        asteroids.Add(asteroid);
     }
 }
 

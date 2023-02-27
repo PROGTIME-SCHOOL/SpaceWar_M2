@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using System.Collections.Generic;
 
 namespace SpaceWar_M2.Classes
 {
@@ -17,6 +18,15 @@ namespace SpaceWar_M2.Classes
         private float speed;
 
         private Rectangle collision;
+
+        // weapon
+        private List<Bullet> bulletList = new List<Bullet>();  // магазин пятерочка
+
+        // time
+        private int time = 0;
+        private int maxTime = 60;
+
+        // properties
 
         public Rectangle Collision { get { return collision; } }
 
@@ -33,9 +43,11 @@ namespace SpaceWar_M2.Classes
         public void LoadContent(ContentManager content)
         {
             texture = content.Load<Texture2D>("player");
+
+            
         }
 
-        public void Update()
+        public void Update(ContentManager content)
         {
             KeyboardState keyboardState = Keyboard.GetState();
 
@@ -86,11 +98,39 @@ namespace SpaceWar_M2.Classes
             // collision
             collision = new Rectangle((int)position.X, (int)position.Y,
                 texture.Width, texture.Height);
+
+            // weapon
+
+            time++;
+
+            if (time > maxTime)
+            {
+                // generate bullet
+                Bullet bullet = new Bullet(position);
+                bullet.LoadContent(content);
+
+                bulletList.Add(bullet);
+
+                time = 0;
+            }
+
+            // работа со всеми пульками в игре
+            for (int i = 0; i < bulletList.Count; i++)
+            {
+                Bullet bullet = bulletList[i];
+
+                bullet.Update();
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, position, Color.White);
+
+            foreach (var bullet in bulletList)
+            {
+                bullet.Draw(spriteBatch);
+            }
         }
     }
 }
