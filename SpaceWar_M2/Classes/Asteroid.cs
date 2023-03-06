@@ -11,10 +11,13 @@ namespace SpaceWar_M2.Classes
     {
         private Texture2D texture;
         private Vector2 position;
+        private bool isAlive;
 
         private Rectangle collision;
 
         public Rectangle Collision { get { return collision; } }
+
+        public bool IsAlive { get { return isAlive; } set { isAlive = value; } }
 
         public int Width
         {

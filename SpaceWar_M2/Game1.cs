@@ -69,6 +69,8 @@ public class Game1 : Game
 
         UpdateAsteroids();
 
+        CheckCollision();
+
         base.Update(gameTime);
     }
 
@@ -93,6 +95,28 @@ public class Game1 : Game
         base.Draw(gameTime);
     }
 
+    private void CheckCollision()
+    {
+        foreach (var asteroid in asteroids)
+        {
+            // each asteroid and player
+            if (player.Collision.Intersects(asteroid.Collision))
+            {
+                asteroid.IsAlive = false;
+            }
+
+            // each asteroid and each bullet
+            foreach (var bullet in player.Bullets)
+            {
+                if (asteroid.Collision.Intersects(bullet.Collision))
+                {
+                    asteroid.IsAlive = false;
+                    bullet.IsAlive = false;
+                }
+            }
+        }
+    }
+
 
     private void UpdateAsteroids()
     {
@@ -113,12 +137,11 @@ public class Game1 : Game
                 asteroid.Position = new Vector2(x, y);
             }
 
-            // check collision
-            if (asteroid.Collision.Intersects(player.Collision))
+
+            if (!asteroid.IsAlive)
             {
-                // ERROR!!! NEED FIX
                 asteroids.Remove(asteroid);
-                i--;    // !!!
+                i--;
             }
         }
 

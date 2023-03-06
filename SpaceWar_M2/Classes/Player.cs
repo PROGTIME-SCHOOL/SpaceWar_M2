@@ -24,11 +24,16 @@ namespace SpaceWar_M2.Classes
 
         // time
         private int time = 0;
-        private int maxTime = 60;
+        private int maxTime = 30;
 
         // properties
 
         public Rectangle Collision { get { return collision; } }
+
+        public List<Bullet> Bullets
+        {
+            get { return bulletList; }
+        }
 
         // constructor
         public Player()
@@ -106,7 +111,11 @@ namespace SpaceWar_M2.Classes
             if (time > maxTime)
             {
                 // generate bullet
-                Bullet bullet = new Bullet(position);
+                Bullet bullet = new Bullet();
+
+                bullet.Position = new Vector2(position.X + texture.Width / 2 - bullet.Width / 2,
+                    position.Y - bullet.Height/2);
+
                 bullet.LoadContent(content);
 
                 bulletList.Add(bullet);
@@ -118,9 +127,19 @@ namespace SpaceWar_M2.Classes
             for (int i = 0; i < bulletList.Count; i++)
             {
                 Bullet bullet = bulletList[i];
-
                 bullet.Update();
             }
+
+            // зачистка листа
+            for (int i = 0; i < bulletList.Count; i++)
+            {
+                if (!bulletList[i].IsAlive)
+                {
+                    bulletList.RemoveAt(i);
+                    i--;
+                }
+            }
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
