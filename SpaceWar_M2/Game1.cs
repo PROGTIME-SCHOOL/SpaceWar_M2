@@ -18,9 +18,9 @@ public class Game1 : Game
 
     private Player player;
     private Space space;
-    //private Asteroid asteroid;
 
     private List<Asteroid> asteroids;
+    private List<Explosion> explosions;
 
 
     public Game1()
@@ -43,6 +43,7 @@ public class Game1 : Game
         //asteroid = new Asteroid();
 
         asteroids = new List<Asteroid>();
+        explosions = new List<Explosion>();
 
         base.Initialize();
     }
@@ -54,7 +55,6 @@ public class Game1 : Game
         // TODO: use this.Content to load your game content here
         player.LoadContent(Content);
         space.LoadContent(Content);
-
 
     }
 
@@ -70,6 +70,7 @@ public class Game1 : Game
         UpdateAsteroids();
 
         CheckCollision();
+
 
         base.Update(gameTime);
     }
@@ -89,6 +90,7 @@ public class Game1 : Game
         {
             asteroid.Draw(_spriteBatch);
         }
+
 
         _spriteBatch.End();
 

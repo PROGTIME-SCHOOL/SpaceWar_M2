@@ -4,14 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
-
 namespace SpaceWar_M2.Classes
 {
     public class Asteroid
     {
         private Texture2D texture;
         private Vector2 position;
-        private bool isAlive;
+        private bool isAlive = true;
 
         private Rectangle collision;
 
