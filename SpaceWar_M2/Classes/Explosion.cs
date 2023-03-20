@@ -11,6 +11,7 @@ namespace SpaceWar_M2.Classes
 	{
 		private Texture2D texture;  // 1983  x  117
         private Vector2 position;
+		private bool isAlive = true;
 
 		private Rectangle sourceRectangle;   // нужно для рисования области текстуры
 
@@ -19,9 +20,11 @@ namespace SpaceWar_M2.Classes
 		private int frameHeight = 117;
 
 		private double timeTotalSeconds = 0;
-		private double duration = 0.2;
+		private double duration = 0.03;
 
-		private bool isLoop = true;
+		private bool isLoop = false;
+
+		public bool IsAlive { get { return isAlive; } }
 
 		public Explosion(Vector2 position)
 		{
@@ -46,10 +49,10 @@ namespace SpaceWar_M2.Classes
 				timeTotalSeconds = 0;
             }
 
-			// loop
-			if (frameNumber == 17 && isLoop)
+			// no loop
+			if (frameNumber == 17 && !isLoop)
 			{
-				frameNumber = 0;
+				isAlive = false;
 			}
 
             sourceRectangle = new Rectangle(frameNumber * frameWidth, 0, frameWidth, frameHeight);

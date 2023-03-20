@@ -5,6 +5,7 @@ using System.Collections.Generic;    // for list
 using System;
 
 using SpaceWar_M2.Classes;
+using SpaceWar_M2.Classes.Components;
 
 namespace SpaceWar_M2;
 
@@ -22,6 +23,7 @@ public class Game1 : Game
     private List<Asteroid> asteroids;
     private List<Explosion> explosions;
 
+    private Label label;
 
     public Game1()
     {
@@ -45,6 +47,8 @@ public class Game1 : Game
         asteroids = new List<Asteroid>();
         explosions = new List<Explosion>();
 
+        label = new Label("Hello, World!!!", Vector2.Zero, Color.White);
+
         base.Initialize();
     }
 
@@ -56,6 +60,7 @@ public class Game1 : Game
         player.LoadContent(Content);
         space.LoadContent(Content);
 
+        label.LoadContent(Content);
     }
 
     protected override void Update(GameTime gameTime)
@@ -66,8 +71,8 @@ public class Game1 : Game
         // TODO: Add your update logic here
         player.Update(Content);
         space.Update();
-
         UpdateAsteroids();
+        UpdateExplosions(gameTime);
 
         CheckCollision();
 
@@ -91,6 +96,12 @@ public class Game1 : Game
             asteroid.Draw(_spriteBatch);
         }
 
+        foreach (var explosion in explosions)
+        {
+            explosion.Draw(_spriteBatch);
+        }
+
+        label.Draw(_spriteBatch);
 
         _spriteBatch.End();
 
@@ -105,6 +116,10 @@ public class Game1 : Game
             if (player.Collision.Intersects(asteroid.Collision))
             {
                 asteroid.IsAlive = false;
+
+                Explosion explosion = new Explosion(asteroid.Position);
+                explosion.LoadContent(Content);
+                explosions.Add(explosion);
             }
 
             // each asteroid and each bullet
@@ -114,7 +129,25 @@ public class Game1 : Game
                 {
                     asteroid.IsAlive = false;
                     bullet.IsAlive = false;
+
+                    Explosion explosion = new Explosion(asteroid.Position);
+                    explosion.LoadContent(Content);
+                    explosions.Add(explosion);
                 }
+            }
+        }
+    }
+
+    private void UpdateExplosions(GameTime gameTime)
+    {
+        for (int i = 0; i < explosions.Count; i++)
+        {
+            explosions[i].Update(gameTime);
+
+            if (!explosions[i].IsAlive)
+            {
+                explosions.RemoveAt(i);
+                i--;
             }
         }
     }

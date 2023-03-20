@@ -28,6 +28,8 @@ namespace SpaceWar_M2.Classes
 
         // properties
 
+        public Vector2 Position { get { return position; } }
+
         public Rectangle Collision { get { return collision; } }
 
         public List<Bullet> Bullets
