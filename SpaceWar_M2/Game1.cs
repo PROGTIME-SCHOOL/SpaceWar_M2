@@ -14,6 +14,8 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
+    public static GameMode gameMode = GameMode.GameOver;
+
     private int screenWidth = 800;
     private int screenHeight = 600;
 
@@ -24,6 +26,10 @@ public class Game1 : Game
     private List<Explosion> explosions;
 
     private Label label;
+
+    private MainMenu mainMenu = new MainMenu();
+
+    private GameOver gameOver = new GameOver();
 
     public Game1()
     {
@@ -61,21 +67,44 @@ public class Game1 : Game
         space.LoadContent(Content);
 
         label.LoadContent(Content);
+
+        mainMenu.LoadContent(Content);
+
+        gameOver.LoadContent(Content);
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
-
         // TODO: Add your update logic here
-        player.Update(Content);
-        space.Update();
-        UpdateAsteroids();
-        UpdateExplosions(gameTime);
 
-        CheckCollision();
+        switch (gameMode)
+        {
+            case GameMode.Playing:
 
+                if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                {
+                    gameMode = GameMode.Menu;
+                }
+
+                player.Update(Content);
+                space.Update();
+                UpdateAsteroids();
+                UpdateExplosions(gameTime);
+                CheckCollision();
+                break;
+
+            case GameMode.Menu:
+                mainMenu.Update();
+                break;
+
+            case GameMode.GameOver:
+                gameOver.Update();
+                break;
+
+            case GameMode.Exit:
+                Exit();
+                break;
+        }
 
         base.Update(gameTime);
     }
@@ -87,21 +116,33 @@ public class Game1 : Game
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
 
-        space.Draw(_spriteBatch);
-        player.Draw(_spriteBatch);
-        //asteroid.Draw(_spriteBatch);
-
-        foreach (Asteroid asteroid in asteroids)
+        switch (gameMode)
         {
-            asteroid.Draw(_spriteBatch);
-        }
+            case GameMode.Playing:
+                space.Draw(_spriteBatch);
+                player.Draw(_spriteBatch);
 
-        foreach (var explosion in explosions)
-        {
-            explosion.Draw(_spriteBatch);
-        }
+                foreach (Asteroid asteroid in asteroids)
+                {
+                    asteroid.Draw(_spriteBatch);
+                }
 
-        label.Draw(_spriteBatch);
+                foreach (var explosion in explosions)
+                {
+                    explosion.Draw(_spriteBatch);
+                }
+
+                label.Draw(_spriteBatch);
+                break;
+
+            case GameMode.Menu:
+                mainMenu.Draw(_spriteBatch);
+                break;
+
+            case GameMode.GameOver:
+                gameOver.Draw(_spriteBatch);
+                break;
+        }
 
         _spriteBatch.End();
 

@@ -13,6 +13,11 @@ namespace SpaceWar_M2.Classes.Components
 		private Color color;
 		private string text;
 
+		public Color Color
+		{
+			set { color = value; }
+		}
+
 		public Label(string text, Vector2 position, Color color)
 		{
 			spriteFont = null;
