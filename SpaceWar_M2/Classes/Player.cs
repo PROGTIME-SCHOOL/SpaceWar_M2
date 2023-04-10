@@ -17,6 +17,9 @@ namespace SpaceWar_M2.Classes
         private TypePlayer typePlayer;
         private float speed;
 
+        // data
+        private int health = 10;
+
         private Rectangle collision;
 
         // weapon
@@ -25,6 +28,9 @@ namespace SpaceWar_M2.Classes
         // time
         private int time = 0;
         private int maxTime = 30;
+
+        // events
+        public event Action TakeDamage;
 
         // properties
 
@@ -151,6 +157,18 @@ namespace SpaceWar_M2.Classes
             foreach (var bullet in bulletList)
             {
                 bullet.Draw(spriteBatch);
+            }
+        }
+
+        // buisness logic
+
+        public void Damage()
+        {
+            health--;
+
+            if (TakeDamage != null)
+            {
+                TakeDamage();
             }
         }
     }

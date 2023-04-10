@@ -14,7 +14,7 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    public static GameMode gameMode = GameMode.GameOver;
+    public static GameMode gameMode = GameMode.Playing;
 
     private int screenWidth = 800;
     private int screenHeight = 600;
@@ -30,6 +30,8 @@ public class Game1 : Game
     private MainMenu mainMenu = new MainMenu();
 
     private GameOver gameOver = new GameOver();
+
+    private HUD hud = new HUD();
 
     public Game1()
     {
@@ -55,6 +57,8 @@ public class Game1 : Game
 
         label = new Label("Hello, World!!!", Vector2.Zero, Color.White);
 
+        player.TakeDamage += hud.OnPlayerTakeDamage;
+
         base.Initialize();
     }
 
@@ -71,6 +75,8 @@ public class Game1 : Game
         mainMenu.LoadContent(Content);
 
         gameOver.LoadContent(Content);
+
+        hud.LoadContent(Content);
     }
 
     protected override void Update(GameTime gameTime)
@@ -91,6 +97,7 @@ public class Game1 : Game
                 UpdateAsteroids();
                 UpdateExplosions(gameTime);
                 CheckCollision();
+                hud.Update();
                 break;
 
             case GameMode.Menu:
@@ -132,7 +139,10 @@ public class Game1 : Game
                     explosion.Draw(_spriteBatch);
                 }
 
-                label.Draw(_spriteBatch);
+                //label.Draw(_spriteBatch);
+
+                hud.Draw(_spriteBatch);
+
                 break;
 
             case GameMode.Menu:
@@ -157,6 +167,8 @@ public class Game1 : Game
             if (player.Collision.Intersects(asteroid.Collision))
             {
                 asteroid.IsAlive = false;
+
+                player.Damage();
 
                 Explosion explosion = new Explosion(asteroid.Position);
                 explosion.LoadContent(Content);
