@@ -10,15 +10,20 @@ namespace SpaceWar_M2.Classes.Components
 	{
 		private Texture2D texture;
 		private Vector2 position;
-		private int width;
+
 		private int height;
 		private int numParts;
+		private int partWidth;
 
-		public int Width
+		public int NumParts
 		{
+			get
+			{
+				return numParts;
+			}
 			set
 			{
-				width = value;
+				numParts = value;
 			}
 		}
 
@@ -27,17 +32,19 @@ namespace SpaceWar_M2.Classes.Components
 			get
 			{
 				return new Rectangle((int)position.X, (int)position.Y,
-					width, height);
+					partWidth * numParts, height);
 			}
 		}
 
 		public HealthBar(Vector2 position, int numParts, int width, int height)
 		{
 			this.position = position;
-			this.width = width;
+
 			this.height = height;
 			this.numParts = numParts;
-		}
+
+			partWidth = width / numParts;
+        }
 
 		public void LoadContent(ContentManager manager)
 		{

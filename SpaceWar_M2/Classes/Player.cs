@@ -19,6 +19,7 @@ namespace SpaceWar_M2.Classes
 
         // data
         private int health = 10;
+        private int score = 12;
 
         private Rectangle collision;
 
@@ -31,6 +32,7 @@ namespace SpaceWar_M2.Classes
 
         // events
         public event Action TakeDamage;
+        public event Action<int> ScoreUpdated;
 
         // properties
 
@@ -169,6 +171,16 @@ namespace SpaceWar_M2.Classes
             if (TakeDamage != null)
             {
                 TakeDamage();
+            }
+        }
+
+        public void AddScore()
+        {
+            score++;
+
+            if (ScoreUpdated != null)
+            {
+                ScoreUpdated(score);
             }
         }
     }

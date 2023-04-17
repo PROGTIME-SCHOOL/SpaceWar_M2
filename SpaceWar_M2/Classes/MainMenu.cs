@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
 using SpaceWar_M2.Classes.Components;
-using System.Reflection.Metadata;
 
 namespace SpaceWar_M2.Classes
 {
@@ -18,12 +17,15 @@ namespace SpaceWar_M2.Classes
         private KeyboardState keyboardState;        // нынешнее состояние клавиатуры
         private KeyboardState prevKeyboardState;    // предыдущее состояние клавиатуры
 
+        private Vector2 position = new Vector2(400, 200);
+
         public MainMenu()
         {
             selected = 1;
 
-            buttonList.Add(new Label("Play", new Vector2(0, 0), Color.White));
-            buttonList.Add(new Label("Exit", new Vector2(0, 40), Color.White));
+            buttonList.Add(new Label("Play", position, Color.White));
+            buttonList.Add(new Label("Exit Exit Exit", new Vector2(position.X, position.Y + 40),
+                Color.White));
         }
 
         public void LoadContent(ContentManager content)
@@ -31,6 +33,14 @@ namespace SpaceWar_M2.Classes
             foreach (var item in buttonList)
             {
                 item.LoadContent(content);
+            }
+
+            // magic line = position
+
+            foreach (var label in buttonList)
+            {
+                label.Position = new Vector2(label.Position.X - label.Width / 2,
+                    label.Position.Y);
             }
         }
 

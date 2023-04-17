@@ -18,8 +18,25 @@ namespace SpaceWar_M2.Classes.Components
 			set { color = value; }
 		}
 
-		public Label(string text, Vector2 position, Color color)
+		public Vector2 Position
 		{
+			get { return position; }
+			set { position = value; }
+		}
+
+		public float Width
+		{
+			get { return spriteFont.MeasureString(text).X; }
+		}
+
+        public float Height
+        {
+            get { return spriteFont.MeasureString(text).Y; }
+        }
+
+        public Label(string text, Vector2 position, Color color)
+		{
+
 			spriteFont = null;
 
 			this.color = color;

@@ -13,6 +13,11 @@ namespace SpaceWar_M2.Classes
         private Texture2D texture;
         private float speed;
 
+        public float Speed
+        {
+            set { speed = value; }
+        }
+
         public Space()
         {
             texture = null;

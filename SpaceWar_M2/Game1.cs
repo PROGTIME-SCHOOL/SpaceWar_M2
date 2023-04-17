@@ -92,6 +92,7 @@ public class Game1 : Game
                     gameMode = GameMode.Menu;
                 }
 
+                space.Speed = 1;
                 player.Update(Content);
                 space.Update();
                 UpdateAsteroids();
@@ -102,10 +103,14 @@ public class Game1 : Game
 
             case GameMode.Menu:
                 mainMenu.Update();
+                space.Speed = 0.5f;
+                space.Update();
                 break;
 
             case GameMode.GameOver:
                 gameOver.Update();
+                space.Speed = 0.5f;
+                space.Update();
                 break;
 
             case GameMode.Exit:
@@ -146,10 +151,12 @@ public class Game1 : Game
                 break;
 
             case GameMode.Menu:
+                space.Draw(_spriteBatch);
                 mainMenu.Draw(_spriteBatch);
                 break;
 
             case GameMode.GameOver:
+                space.Draw(_spriteBatch);
                 gameOver.Draw(_spriteBatch);
                 break;
         }
