@@ -16,7 +16,9 @@ namespace SpaceWar_M2.Classes
         private int width = 20;
         private int height = 20;
 
-        private int speed = 3;
+        private int speed = 200;
+
+        private Vector2 vectorDirection = new Vector2(1, 0);
 
         public int Width { get { return width; } }
         public int Height { get { return height; } }
@@ -44,16 +46,18 @@ namespace SpaceWar_M2.Classes
             }
         }
 
-        public Bullet()
+        public Bullet(Vector2 vectorDirection)
         {
             texture = null;
+            this.vectorDirection = vectorDirection;
             destinationRectangle = new Rectangle(0, 0, width, height);
         }
 
-        public Bullet(Vector2 position)
+        public Bullet(Texture2D texture, Vector2 vectorDirection)
         {
-            texture = null;
-            destinationRectangle = new Rectangle((int)position.X, (int)position.Y, width, height);
+            this.texture = texture;
+            this.vectorDirection = vectorDirection;
+            destinationRectangle = new Rectangle(0, 0, width, height);
         }
 
         public void LoadContent(ContentManager manager)
@@ -61,11 +65,18 @@ namespace SpaceWar_M2.Classes
             texture = manager.Load<Texture2D>("asteroid");
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-            destinationRectangle.Y -= speed;
+            //destinationRectangle.Y -= speed;
 
-            if (Position.Y < 0 - height)
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            Vector2 vectorVelocity = vectorDirection * speed;
+
+            Position = Position + vectorVelocity * delta;
+
+            if (Position.Y < - height || Position.X < -width ||
+                Position.Y > 600 || Position.X > 800)
             {
                 isAlive = false;
             }

@@ -33,6 +33,8 @@ public class Game1 : Game
 
     private HUD hud = new HUD();
 
+    private Weapon weapon = new Weapon(new Vector2(350, 100), new Vector2(0, 1));
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -77,6 +79,8 @@ public class Game1 : Game
         gameOver.LoadContent(Content);
 
         hud.LoadContent(Content);
+
+        weapon.LoadContent(Content);
     }
 
     protected override void Update(GameTime gameTime)
@@ -93,12 +97,13 @@ public class Game1 : Game
                 }
 
                 space.Speed = 1;
-                player.Update(Content);
+                player.Update(Content, gameTime);
                 space.Update();
                 UpdateAsteroids();
                 UpdateExplosions(gameTime);
                 CheckCollision();
                 hud.Update();
+                weapon.Update(gameTime);
                 break;
 
             case GameMode.Menu:
@@ -146,7 +151,11 @@ public class Game1 : Game
 
                 //label.Draw(_spriteBatch);
 
+                weapon.Draw(_spriteBatch);
+
                 hud.Draw(_spriteBatch);
+
+
 
                 break;
 

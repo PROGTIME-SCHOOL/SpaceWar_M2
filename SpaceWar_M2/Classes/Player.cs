@@ -24,7 +24,7 @@ namespace SpaceWar_M2.Classes
         private Rectangle collision;
 
         // weapon
-        private List<Bullet> bulletList = new List<Bullet>();  // магазин пятерочка
+        private List<Bullet> bulletList = new List<Bullet>();  // магазин
 
         // time
         private int time = 0;
@@ -57,12 +57,10 @@ namespace SpaceWar_M2.Classes
         // methods
         public void LoadContent(ContentManager content)
         {
-            texture = content.Load<Texture2D>("player");
-
-            
+            texture = content.Load<Texture2D>("player"); 
         }
 
-        public void Update(ContentManager content)
+        public void Update(ContentManager content, GameTime gameTime)
         {
             KeyboardState keyboardState = Keyboard.GetState();
 
@@ -121,7 +119,7 @@ namespace SpaceWar_M2.Classes
             if (time > maxTime)
             {
                 // generate bullet
-                Bullet bullet = new Bullet();
+                Bullet bullet = new Bullet(new Vector2(0, -1));
 
                 bullet.Position = new Vector2(position.X + texture.Width / 2 - bullet.Width / 2,
                     position.Y - bullet.Height/2);
@@ -137,7 +135,7 @@ namespace SpaceWar_M2.Classes
             for (int i = 0; i < bulletList.Count; i++)
             {
                 Bullet bullet = bulletList[i];
-                bullet.Update();
+                bullet.Update(gameTime);
             }
 
             // зачистка листа
