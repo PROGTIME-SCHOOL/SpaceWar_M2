@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;    // for list
 using System;
 
@@ -35,6 +37,8 @@ public class Game1 : Game
 
     private Weapon weapon = new Weapon(new Vector2(350, 100), new Vector2(0, 1));
 
+    private Song gameSong;
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -60,6 +64,9 @@ public class Game1 : Game
         label = new Label("Hello, World!!!", Vector2.Zero, Color.White);
 
         player.TakeDamage += hud.OnPlayerTakeDamage;
+        player.ScoreUpdated += hud.OnScoreChanged;
+
+        mainMenu.OnPlayingStarted += SwitchGameMode;
 
         base.Initialize();
     }
@@ -81,6 +88,9 @@ public class Game1 : Game
         hud.LoadContent(Content);
 
         weapon.LoadContent(Content);
+
+        gameSong = Content.Load<Song>("gameMusic");
+        MediaPlayer.Play(gameSong);
     }
 
     protected override void Update(GameTime gameTime)
@@ -104,6 +114,13 @@ public class Game1 : Game
                 CheckCollision();
                 hud.Update();
                 weapon.Update(gameTime);
+
+                if (player.Health <= 0)
+                {
+                    gameMode = GameMode.GameOver;
+                    gameOver.SetScore(player.Score);
+                }
+
                 break;
 
             case GameMode.Menu:
@@ -189,6 +206,8 @@ public class Game1 : Game
                 Explosion explosion = new Explosion(asteroid.Position);
                 explosion.LoadContent(Content);
                 explosions.Add(explosion);
+
+                explosion.PlaySoundEffect();
             }
 
             // each asteroid and each bullet
@@ -202,6 +221,10 @@ public class Game1 : Game
                     Explosion explosion = new Explosion(asteroid.Position);
                     explosion.LoadContent(Content);
                     explosions.Add(explosion);
+
+                    explosion.PlaySoundEffect();
+
+                    player.AddScore();
                 }
             }
         }
@@ -275,6 +298,24 @@ public class Game1 : Game
 
         // добавляем астеройд в лист
         asteroids.Add(asteroid);
+    }
+
+    public void SwitchGameMode()
+    {
+        gameMode = GameMode.Playing;
+
+        Reset();
+    }
+
+    public void Reset()
+    {
+        player.Reset();
+
+        explosions.Clear();
+        asteroids.Clear();
+        player.Bullets.Clear();
+
+        hud.Reset();
     }
 }
 

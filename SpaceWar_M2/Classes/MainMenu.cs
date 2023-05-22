@@ -17,11 +17,13 @@ namespace SpaceWar_M2.Classes
         private KeyboardState keyboardState;        // нынешнее состояние клавиатуры
         private KeyboardState prevKeyboardState;    // предыдущее состояние клавиатуры
 
+        public event Action OnPlayingStarted;
+
         private Vector2 position = new Vector2(400, 200);
 
         public MainMenu()
         {
-            selected = 1;
+            selected = 0;
 
             buttonList.Add(new Label("Play", position, Color.White));
             buttonList.Add(new Label("Exit Exit Exit", new Vector2(position.X, position.Y + 40),
@@ -74,7 +76,12 @@ namespace SpaceWar_M2.Classes
             {
                 if (selected == 0)
                 {
-                    Game1.gameMode = GameMode.Playing;
+                    // Game1.gameMode = GameMode.Playing;
+
+                    if (OnPlayingStarted != null)
+                    {
+                        OnPlayingStarted();
+                    }
                 }
                 else if (selected == 1)
                 {

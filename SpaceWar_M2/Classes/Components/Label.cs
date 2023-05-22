@@ -13,6 +13,12 @@ namespace SpaceWar_M2.Classes.Components
 		private Color color;
 		private string text;
 
+		public string Text
+		{
+			get { return text; }
+			set { text = value; }
+		}
+
 		public Color Color
 		{
 			set { color = value; }

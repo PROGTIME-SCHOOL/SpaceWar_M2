@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using SpaceWar_M2.Classes.Components;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace SpaceWar_M2.Classes
 {
@@ -41,10 +42,21 @@ namespace SpaceWar_M2.Classes
 		}
 
 
-		public void OnPlayerTakeDamage()
+		public void OnPlayerTakeDamage(int health)
 		{
-			healthBar.NumParts--;
+			healthBar.NumParts = health;
 		}
+
+		public void OnScoreChanged(int score)
+		{
+			labelScore.Text = $"Score: {score}";
+        }
+
+		public void Reset()
+        {
+			healthBar.NumParts = 10;
+			labelScore.Text = $"Score: 0";
+        }
 	}
 }
 

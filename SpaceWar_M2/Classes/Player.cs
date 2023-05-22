@@ -19,7 +19,7 @@ namespace SpaceWar_M2.Classes
 
         // data
         private int health = 10;
-        private int score = 12;
+        private int score = 0;
 
         private Rectangle collision;
 
@@ -31,10 +31,14 @@ namespace SpaceWar_M2.Classes
         private int maxTime = 30;
 
         // events
-        public event Action TakeDamage;
+        public event Action<int> TakeDamage;
         public event Action<int> ScoreUpdated;
 
         // properties
+
+        public int Score { get { return score; } }
+
+        public int Health { get { return health; } }
 
         public Vector2 Position { get { return position; } }
 
@@ -168,7 +172,7 @@ namespace SpaceWar_M2.Classes
 
             if (TakeDamage != null)
             {
-                TakeDamage();
+                TakeDamage(health);
             }
         }
 
@@ -180,6 +184,13 @@ namespace SpaceWar_M2.Classes
             {
                 ScoreUpdated(score);
             }
+        }
+
+        public void Reset()
+        {
+            position = new Vector2(350, 400);
+            score = 0;
+            health = 10;
         }
     }
 }

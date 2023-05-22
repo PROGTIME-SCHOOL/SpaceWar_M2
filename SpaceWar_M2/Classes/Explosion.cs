@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using System.Diagnostics;
 
 namespace SpaceWar_M2.Classes
@@ -24,6 +26,8 @@ namespace SpaceWar_M2.Classes
 
 		private bool isLoop = false;
 
+		private SoundEffect soundEffect;
+
 		public bool IsAlive { get { return isAlive; } }
 
 		public Explosion(Vector2 position)
@@ -36,10 +40,14 @@ namespace SpaceWar_M2.Classes
 		public void LoadContent(ContentManager manager)
 		{
 			texture = manager.Load<Texture2D>("explosion3");
+
+			soundEffect = manager.Load<SoundEffect>("explosion");
 		}
 
 		public void Update(GameTime gameTime)
 		{
+			
+
 			timeTotalSeconds += gameTime.ElapsedGameTime.TotalSeconds;
 
 			if (timeTotalSeconds > duration)
@@ -64,5 +72,10 @@ namespace SpaceWar_M2.Classes
 		{
 			spriteBatch.Draw(texture, position, sourceRectangle, Color.White);
 		}
+
+		public void PlaySoundEffect()
+		{
+            soundEffect.CreateInstance().Play();
+        }
 	}
 }
